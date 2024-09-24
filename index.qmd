@@ -1,0 +1,55 @@
+---
+title: "Tin Buenafe"
+image: "img/profile.png"
+
+about: 
+  template: trestles
+  id: about-block
+  
+  image-shape: rounded
+  image-width: 20em
+  
+  links:
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/tin-buenafe-2b4416208
+    - icon: github
+      text: GitHub
+      href: https://github.com/SnBuenafe
+    - icon: google
+      text: Google Scholar
+      href: https://scholar.google.com/citations?user=Crq-hbsAAAAJ&hl=en
+    - icon: envelope-at
+      text: Contact me
+      href: mailto:k.buenafe@uq.edu.au
+---
+
+Hey there! I'm Kristine Camille Buenafe, but I go by **Tin**.
+
+I'm a PhD candidate at the [Centre for Biodiversity and Conservation Sciences](https://cbcs.centre.uq.edu.au/) at the [University of Queensland](https://www.uq.edu.au/).
+
+Don't hesitate to get in touch through any of my socials!
+
+# Research interests
+
+![](img/research.png){fig-align="left" width=80%}
+
+# Featured publications
+
+* Buenafe, KCV et al. (in review). Current approaches and future opportunities in designing
+climate-smart protected areas. *Nature Reviews Biodiversity*.
+  + review on how measures of climate change have been quantitatively and explicitly incorporated in the design process of area-based management tools (e.g., protected areas) 
+
+* Buenafe, KCV et al. (2023). [A metric-based framework for climate-smart conservation planning](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/eap.2852). *Ecological Applications*.
+  + methods paper providing *practical guidance* on identifying and prioritizing climate-smart areas in conservation planning using climate metrics
+  
+See my [Google Scholar Page](https://scholar.google.com/citations?user=Crq-hbsAAAAJ&hl=en) for my entire list of publications.
+
+# Featured work
+
+* Involvement in the conservation planning work in 
+  + **small-island Pacific nations** with the Waitt Institute, and 
+  + the **Weddell Sea (in the Southern Ocean)** with the Norwegian Polar Institute
+* Development of an R-package for wrangling climate-model outputs
+
+See my [LinkedIn](https://www.linkedin.com/in/tin-buenafe-2b4416208) and [GitHub](https://github.com/SnBuenafe) for more details.

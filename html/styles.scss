@@ -1,0 +1,37 @@
+/*-- scss:defaults --*/
+
+// Colors
+$primary:                     #254559 !default;
+$secondary:                   #84A9BF !default;
+$text-default:                #adb5bd !default;
+$text-light:                  #E9F1F2 !default;
+$gray-300:                    #dee2e6 !default;
+$gray-900:                    #212529 !default;
+
+$font-family-base:            "Palatino", serif !default;
+$headings-font-family:        "Gill Sans", sans-serif !default;
+$font-size-base:              1rem !default; // Assumes the browser default, typically `16px
+$body-text-align:             "left" !default;
+$body-vertical-align:         "middle" !default;
+
+$spacer:                      1rem !default;
+
+$navbar-padding-y:            $spacer * 1 !default;
+$navbar-brand-font-size:      $font-size-base * 2 !default;
+$nav-link-font-size:          $font-size-base * 1.25 !default;
+$navbar-hover-color:          $text-light !default;
+
+// Footer
+$footer-bg:                   $primary !default;
+$footer-fg:                   $gray-300 !default;
+
+// Hovering links
+$link-hover-color:            $secondary !default;
+
+// Margins
+// Left
+$grid-sidebar-width:          10px !default;
+// Right
+$grid-margin-width:           0px !default;
+// Center
+$grid-body-width:             1200px !default;
