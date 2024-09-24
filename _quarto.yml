@@ -15,7 +15,7 @@ project:
   output-dir: docs
 
   preview: 
-   # port: 22222 # trying to use the same port
+    port: 22222 # trying to use the same port
     browser: true
     watch-inputs: true
     navigate: true
