@@ -21,7 +21,7 @@ project:
     navigate: true
 
 execute:
-  freeze: false
+  freeze: auto
 
 format:
   html:
