@@ -36,18 +36,21 @@ Don't hesitate to get in touch through any of my socials!
 
 # Featured publications
 
--   Buenafe, KCV et al. (in review). Current approaches and future opportunities in designing climate-smart protected areas. *Nature Reviews Biodiversity*.
+-   Buenafe, KCV et al. (2025). [Current approaches and future opportunities in designing climate-smart protected areas](https://www.nature.com/articles/s44358-025-00041-0). *Nature Reviews Biodiversity*.
     -   review on how measures of climate change have been quantitatively and explicitly incorporated in the design process of area-based management tools (e.g., protected areas)
 -   Buenafe, KCV et al. (2023). [A metric-based framework for climate-smart conservation planning](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/eap.2852). *Ecological Applications*.
     -   methods paper providing *practical guidance* on identifying and prioritizing climate-smart areas in conservation planning using climate metrics
 
-See my [Google Scholar Page](https://scholar.google.com/citations?user=Crq-hbsAAAAJ&hl=en) for my entire list of publications.
+See my [Google Scholar Page](https://scholar.google.com/citations?user=Crq-hbsAAAAJ&hl=en) for my full list of publications.
 
 # Featured work
 
+-   Strategy development in **high seas** conservation work through an internship with the [High Seas Alliance](https://highseasalliance.org/)
 -   Involvement in the conservation planning work in
-    -   **small-island Pacific nations** with the Waitt Institute, and
+    -   **small-island Pacific nations** with the [Waitt Institute](https://www.waittinstitute.org/), and
     -   the **Weddell Sea (in the Southern Ocean)** with the Norwegian Polar Institute
 -   Development of an R-package for wrangling climate-model outputs
+
+I'm also part of several working groups in the [Deep Ocean Stewardship Initiative (DOSI)](https://www.dosi-project.org/) and the [International Council for the Exploration of the Seas (ICES)](https://www.ices.dk/Pages/default.aspx). 
 
 See my [LinkedIn](https://www.linkedin.com/in/tin-buenafe-2b4416208) and [GitHub](https://github.com/SnBuenafe) for more details.
