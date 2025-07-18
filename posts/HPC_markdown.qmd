@@ -1,0 +1,591 @@
+---
+title: "Using the UQ HPC"
+author: "Tin Buenafe"
+date: today
+date-format: long
+format: 
+  html:
+      # theme: yeti
+      code-overflow: wrap
+editor: visual
+toc: true
+toc-depth: 2
+callout-appearance: simple
+from: markdown+emoji
+image: feature_hpc.png
+---
+
+```{r}
+#| label: klippy
+#| echo: false
+#| include: true
+klippy::klippy()
+```
+
+# Introduction
+
+This is a compilation of notes that I've gathered as I work on the High Performance Computing Facilities (HPC) at the University of Queensland to develop climate trajectory models. While a lot of what will be covered here can be transferable to other HPC facilities, there will be certain intricacies that are specific to UQ's \[current\] HPC (*Bunya*). These notes will also not replace the trainings offered by UQ's Research Computing Centre (RCC) team: <https://rcc.uq.edu.au/training-support/training-courses>. You can also attend *Hacky Hour* on Tuesdays or *vHPC support* on Thursdays weekly: <https://rcc.uq.edu.au/training-support/meetups>. I personally found attending these useful and David Green from UQ has been extremely helpful!
+
+In order to follow along, you'll need to have an existing HPC account. This process may take some time, so if you are looking to work on the HPC sometime soon, better start on the paperwork! UQ has a lot of useful [documentation](https://rcc.uq.edu.au/systems/high-performance-computing) to get you started on opening your HPC account.
+
+And for ease, I've prepared a [.zip file](https://github.com/SnBuenafe/HPC_notes/releases/download/v1.0.0/UQ_HPC_tutorial.zip) with all of the materials we'll be using today.
+
+## Why should you work on the HPC?
+
+If you're currently running code that makes your RStudio crash, your monitor show that famous blue screen (if you're on Windows) or if you can hear your machine struggle as it works through dozens of global climate models..... then you should probably consider using the HPC :grimacing:. If you already have code that works on your machine, then moving your workflow to the HPC should be doable. I'm not saying it's easy, but it's a very fruitful journey — one that I definitely don't regret going through.
+
+## Store data in your RDM
+
+Again, this might be bespoke to UQ, but we are fortunate to have access to the UQ Research Data Manager (RDM), where students and staff can store and manage data related to their research. This is where I store all of my climate models and the code that I run in the HPC pulls data from my RDM and saves the finished outputs in my RDM as well. You can access your RDM through the [Cloud](https://cloud.rdm.uq.edu.au/index.php/apps/files/files) but you can also access it through your terminal.
+
+## Use Visual Studio Code
+
+I can't emphasize this enough, but using [Visual Studio Code (VSCode)](https://code.visualstudio.com/) when coding and working on the HPC has been incredibly game-changing.
+
+Before, I've mainly used VSCode to write my bash scripts, but now, when working on my trajectory models, I (usually) don't open RStudio anymore. I mostly work on VSCode. It has a lot of benefits, but the main benefit for me is being able to access my terminal, my scripts, and my directory in a very user-friendly manner. And you can open multiple panels of these — and they can all work simultaneously! :exploding_head:
+
+For example, in one window, I can have two terminals open—one running an interactive session in the HPC and one ready to run a batch job—and I can have two scripts open—one R script that I'm editing and one SLURM script to make sure that all my inputs into my HPC batch job are correct. Don't worry, we'll go through all these files shortly.
+
+# Access the HPC using your terminal
+
+It's as simple as this code.
+
+``` default
+ssh USERNAME@bunya.rcc.uq.edu.au
+```
+
+Change USERNAME to your actual username. For UQ staff, it should be your UQ staff ID, for UQ students (and most HDRs?), it should be your student number. And this is the annoying bit, but you'd need to have your Duo ready for two-factor authentication every time you access the HPC.
+
+To exit the HPC, simply type `exit` on your terminal and hit enter.
+
+# Directories in the HPC
+
+You will have two general directories in the HPC: 1) your `/home/` directory; and 2) your `/scratch/` directory.
+
+When you log into the HPC, the default directory should be your `/home/` directory. Normally, you'll save the things you care more about in your `/home/` directory. For example, outputs of some code you've ran in the HPC. Again, change `USERNAME` into your actual username (e.g., UQ staff ID or UQ student ID).
+
+``` default
+# to know what is the path of your /home/ directory
+echo $HOME
+
+# to change into your /home/ directory do either:
+cd $HOME
+# or
+cd /home/USERNAME
+```
+
+The `/scratch/` directory is usually where you'll save code that you'll run in interactive sessions or batch jobs. You shouldn't save the outputs you care about in your `/scratch/` because this gets refreshed (i.e., purged) more frequently.
+
+``` default
+# to change into your /scratch/ directory
+cd /scratch/user/USERNAME
+
+# instead of manually writing down your username, you can also use this code
+echo $USER
+cd /scratch/user/$USER
+```
+
+# Accessing your RDM in the HPC
+
+Again, this might be bespoke to UQ's HPC, but when you're creating an RDM, make sure that it's the **Q** type so that you can access it easily in your HPC.
+
+``` default
+# note: this code won't work for you because you don't have access to my RDM :)
+cd /QRISdata/Q7957
+```
+
+You can also access RDMs of collaborators that you have access to.
+
+``` default
+# note: this code won't work for you because you don't have access to Alvise's RDM :)
+cd /QRISdata/Q7384
+```
+
+# File transfer
+
+There are two ways you can use the HPC. You can code on the fly in interactive sessions in the HPC but you can also copy the scripts that are already working in your machine into the HPC. In order to do that, you need to know how to transfer files from your local machine into the HPC (or the RDM).
+
+## Using `sftp`
+
+I like to use [Secure File Transfer Protocol (SFTP)](https://www.digitalocean.com/community/tutorials/how-to-use-sftp-to-securely-transfer-files-with-a-remote-server) to transfer my files into a remote server.
+
+``` default
+# to access SFTP
+sftp USERNAME@bunya.rcc.uq.edu.au
+```
+
+To know the different things you can do using `sftp` and the syntax, type in `help` in your terminal. But some of my go-to functions are the following:
+
+1.  Checking which local directory I'm in using `lpwd`
+2.  Checking which remote directory I'm in using `pwd`
+3.  Changing my local directory using `lcd NEW_LOCAL_WORKING_DIRECTORY`
+4.  Changing my remote directory using `cd NEW_REMOTE_WORKING_DIRECTORY`
+5.  Transferring local files to the remote directory using `put -Pr LOCAL_FILES`. `-P` keeps all of the information and permissions from the original file. `-r` recursively copies everything in that local directory into the remote one.
+6.  Downloading files from your remote directory to the local directory using `get -Pr REMOTE_FILES LOCAL_DIRECTORY`
+
+Now, let's try out some of this stuff using CanESM5 surface temperature projections (SSP3-7.0). The data that I'm going to use to demonstrate the HPC workflow are climate data (`.nc` files) downloaded from the [ESGF MetaGrid](https://esgf.nci.org.au/search). In the `.zip` file that I shared, it should be in the `Data/raw/` folder.
+
+Let's try to upload this data into our `/scratch/` directories into a folder named `trial`. Note that I like to do this step in the HPC and not really using SFTP because whenever I tried making a new directory using SFTP, it fails because I don't have the right permissions :woman_shrugging:
+
+``` default
+# if you haven't already, log into the HPC
+ssh USERNAME@bunya.rcc.uq.edu.au
+
+# then make sure you're in the /scratch/ directory
+cd /scratch/user/$USER
+
+# then make a folder
+mkdir trial
+
+# check if the folder was actually created
+ls
+```
+
+Now that you have your folder, access this remote server using SFTP. If you're using your RStudio to code, you'd have to exit the HPC using `exit`. But if you're using VSCode, you can just open a new terminal :zany_face:
+
+``` default
+# access the remote server using SFTP
+sftp USERNAME@bunya.rcc.uq.edu.au
+
+# what's our local directory?
+lpwd # this should be something like ~/Documents/GitHub/HPC_notes (or whatever the directory is of your repository)
+
+# let's move into the Data folder as the local directory
+lcd Data/raw_esms
+
+# check the different files in the local directory
+lls
+
+# what's our remote directory?
+pwd # this should be your /home/ by default
+
+# let's change this to our `trial` folder in our scratch
+cd /scratch/user/USERNAME/trial # NOTE: $USER won't work in SFTP
+```
+
+Now, let's upload the netcdf file into the `trial` folder in our `/scratch/` directory.
+
+``` default
+put -Pr .
+```
+
+You might see that multiple (hidden) files have been uploaded as well! That's because we haven't specified the file type.
+
+The `.` above refers to the set local directory and because we have used the -r (recursive option), all of the files will upload. In real life though, we'll have loads of different file types in the same folder... If we want to specify to only upload netcdf files, your code could look like something like this:
+
+``` default
+put -Pr *.nc
+```
+
+You can also specify specific files you want uploaded:
+
+``` default
+put -Pr filename.tif
+
+# or if a file is within a subfolder of the set local directory
+# for example, if we only set our local directory to be the top level of this repo, the code would look something like:
+put -Pr Data/raw_esms/tos_Omon_CanESM5_ssp370_r1i1p1f1_gn_201501-210012.nc
+```
+
+Now, the `.nc` file should've been uploaded into `/scratch/user/$USER/trial`.
+
+``` default
+# let's take a look
+ls
+```
+
+::: callout-note
+I usually use `sftp` to transfer files from my local machine into the HPC or into my RDM. But if I'm transferring files across different folders within the HPC, I will use Secure Copy (`scp`). *But*, you can use `scp` to do what I just did above using `sftp`: read more [here](https://linuxize.com/post/how-to-use-scp-command-to-securely-transfer-files/). I usually only do this when I need to do a very quick copy (e.g., if I uploaded the wrong R script).
+:::
+
+## Copying to the HPC
+
+We can easily copy files across different folders in the HPC. Let's say we want to copy the `.nc` file that's currently sitting in our `/scratch/` directories into our `/home/` directory.
+
+``` default
+# let's first create a directory in home
+cd $HOME/Documents
+mkdir trial_home
+
+# now we can copy over the netcdf file
+cp /scratch/user/$USER/trial/*.nc /$HOME/Documents/trial_home
+
+# let's check if it was copied over
+ls trial_home
+```
+
+We can also easily delete files using `rm`.
+
+``` default
+rm trial_home/* # delete all files
+
+# you can also specify the files. For example, if you just want to delete all netcdf files, your code will look something like this:
+rm trial_home/*.nc
+```
+
+You'll find that you can't delete everything in a directory if you have subdirectories in it. To illustrate this, copy the following code into your terminal:
+
+``` default
+# let's make a subdirectory within `trial_home`
+mkdir trial_home/subdirectory
+
+# let's copy over the netcdf file into `trial_home`
+cp /scratch/user/$USER/trial/*.nc /$HOME/Documents/trial_home
+
+# let's make sure you now have an empty subdirectory called `subdirectory` and the netcdf file within your `trial_home` directory
+ls trial_home
+
+# now let's try to delete all files
+rm trial_home/*
+```
+
+You'll find that the netcdf file has been deleted, but not the empty subdirectory. This is because you can only remove files using the `rm` function. To delete an **empty** directory, you need to use `rmdir`.
+
+``` default
+rmdir trial_home
+```
+
+But why is this still erroring? That's because `trial_home` is technically not empty. It still has `subdirectory` in it. You can now do this manually by first deleting all the files within all the subdirectories, then deleting each empty subdirectory (and maybe subsubdirectory... if you know what I mean) individually using `rmdir`.
+
+Now, this is **very** tedious, but this was done for a reason. This was so that users do not just carelessly delete everything in a directory. But what if you are very certain that you want this directory gone?
+
+``` default
+rm -rf trial_home
+```
+
+The `-f` flag means "force" and, again, the `-r` flag means "recursive". Only use this code when you're absolutely sure you want to delete the whole directory.
+
+::: callout-note
+You can also easily upload files into your RDM through SFTP. You'd just have to follow the same steps as above but change the remote directory's path into your RDM's path (e.g., `/QRISdata/Q7957/`).
+:::
+
+# Using R in the HPC
+
+Now, I'm going to demonstrate how to run some R code in the HPC. If you already know how to code in R, running some R code in the HPC should be doable. It's definitely handy to know how to code in shell and/or bash, but I'd say that the most difficult part about working in the HPC is learning how to call what and where to do what.
+
+As I mentioned above, typically you have three different "locations" where your data, scripts, and other stuff lie: 1) `/home/` directory; 2) `/scratch/` directory; and 3) your RDM.
+
+This is how I typically handle my files:
+
+-   All of big inputs and outputs (e.g., netcdf, shapefiles, rds files) of my code ran in the HPC are found in my RDM.
+-   Scripts (R scripts, SLURM scripts) and smaller inputs (e.g., .csv files) that are needed to run my workflow are found in my `/scratch/`
+-   I don't really put anything in my `/home/`, but technically I could put my output files from my scripts there.
+
+## Nodes in the HPC
+
+There are two different nodes (that I know of) in the HPC.
+
+The "log-in" node is the default node you get into when you log into your HPC allocation. I would only stay in this node if I'm **not** doing any computations. Simply just looking around at files or file structures.
+
+The "compute" node is where you run your code. There are two ways you can get into a compute node:
+
+1.  Interactive sessions - where you can run R code like you could in an R console
+2.  Batch job - where you could send a big job into the HPC and it runs it all for you from start to finish.
+
+## Interactive sessions
+
+This is the basic way to open an interactive session within the HPC.
+
+``` default
+salloc --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --mem=5G --job-name=InteractiveTrial --time=01:00:00 --partition=general --qos=debug --account=a_richardson srun --export=PATH,TERM,HOME,LANG --pty /bin/bash -l
+```
+
+I'm not going to define all of the parameters here, but here are some important ones that I usually change:
+
+-   `mem`: memory allocated
+-   `job-name`: your interactive session's name. You'd see this code when you're looking at the different jobs you have opened
+-   `time`: how long your need your interactive session to be. You'd want to put more time than you think you'd need because you can `exit` a session easily
+-   `account`: your group's account name
+
+I don't usually change `nodes`, `ntasks-per-node` and `cpus` because if I'd need more than these, I would not open an interactive session, but instead submit a batch job. Typically, you don't want your interactive session to be taking up too much space.
+
+When you run this code, you'll notice that you're currently working on a separate compute node (e.g., `bunxxx`).
+
+To check your jobs that are running, run `squeue --me`.
+
+::: .callout-note
+
+What is **epyc3**?
+
+The HPC has lots of different things available for their users, but using the HPC is not *really* the same as having your own RStudio. Sometimes, you might want to install your own package or use a different version of packages available in the HPC. We'll talk about the different modules available further down this tutorial.
+
+For using the HPC on average, you'll probably only have to encounter **epyc4** compute nodes. This is the most up-to-date compute node that UQ has. But, access to the older **epyc3** node is still available.
+
+*But when should I use epyc3?*
+
+I typically use epyc3 in my workflows because I use Climate Data Operators (cdo) in an R environment (which is not really available in epyc4). Things built (e.g., packages installed) in epyc4 cannot be used in an epyc3 node, BUT things built in epyc3 nodes can be used in an epyc4 node.
+
+To open an epyc3 interactive session, this is the code you'd need to run:
+
+``` default
+salloc --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --mem=5G --job-name=InteractiveTrial --time=01:00:00 --partition=general --qos=debug --constraint=epyc3 --account=a_richardson srun --export=PATH,TERM,HOME,LANG --pty /bin/bash -l
+```
+
+So really, you'd only need to add `constraint`. 
+
+:::
+
+Now that we have gotten an interactive session on, let's try to run R.
+
+R (and other languages) in the HPC are called **modules**. It's typically best practice to "purge" all running modules before you load any new ones to avoid unwanted interactions.
+
+``` default
+module purge
+```
+
+Now, let's look at the different available R modules.
+
+``` default
+# print all modules that have "r" in it
+module avail r
+# this shows a lot of different modules that are not even R
+
+# to make this output more specific
+module avail r/4.4
+```
+
+You should be seeing a couple of different versions. To know which one you'd use, I would suggest talking to David Green first, but typically if you're using some of the basic R stuff, you'd just need to load `r/4.4.2`. `r/4.4.2-heavy` is just `r/4.4.2` but with a lot more available packages. It just takes up more memory in your system because once you load this module, all of the packages are also installed in your node.
+
+``` default
+module load r/4.4.2
+```
+
+Now that the module has been loaded, we can now start R like this. I'm actually not sure why there's `--vanilla` in the code (this is just what David Green taught me), but I'm sure you can start R just by inputting `R`.
+
+``` default
+R --vanilla
+```
+
+Now, we can try to run some basic R stuff.
+
+``` r
+1+1
+```
+
+Packages should be loaded up as well. If not, you should be able to just install packages using `install.packages("package_name")`.
+
+``` r
+library(tidyverse)
+dat <- tribble(~colA, ~colB,
+              "a",   1,
+              "b",   2,
+              "c",   3
+              )
+dat
+q() # quit R session
+```
+
+Now you know how to use R in an interactive session in the HPC! Let's now `exit` from the interactive session because if you don't, you also reduce your "fair share".
+
+::: callout-note
+**Fair share** refers to your priority in the queue of HPC users. The more you use more CPUs, more memory, more time, the more your fair share goes down. If your fair share is low, whenever you run a big batch job, your number in the queue is low, and you might have to wait longer.
+
+Don't worry though, your fair share reloads :grinning: (I think every quarter?)
+:::
+
+## Batch jobs
+
+The main reason why I wanted to work in the HPC is that I already have a working workflow that I want to run in the HPC. To run these workflows, I would recommend submitting a batch job instead of working on it in an interactive session.
+
+Batch jobs are defined using Slurm scripts, which looks like this. This is how my regular Slurm scripts look like.
+
+``` default
+#!bin/bash --login
+#SBATCH --job-name=climate_wrangling_1
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=2
+#SBATCH --mem=16G
+#SBATCH --time=36:00:00
+#SBATCH --qos=normal
+#SBATCH --partition=general
+#SBATCH --constraint=epyc3
+#SBATCH --batch=epyc3
+#SBATCH --account=a_richardson
+
+# Define directories
+INPUT_DIR="/QRISdata/Q7957/Repositories/01_depth_resolved_esms/00_raw_esm"
+echo $INPUT_DIR
+TMP_DIR=$TMPDIR
+echo $TMP_DIR
+
+# Load R
+module purge
+module load r/4.4.0-combo-EPYC3-only
+
+# Run R script
+srun Rscript script.R $INPUT_DIR # and all the other inputs
+```
+
+So there are different sections to this Slurm script. Let's dive into it one section at a time.
+
+The first section refers to the different parameters of the batch job. Some of these parameters are similar to those that we had for an interactive session.
+
+``` default
+# section 1
+#!bin/bash --login
+#SBATCH --job-name=climate_wrangling_1
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=2
+#SBATCH --mem=16G
+#SBATCH --time=36:00:00
+#SBATCH --qos=normal
+#SBATCH --partition=general
+#SBATCH --constraint=epyc3
+#SBATCH --batch=epyc3
+#SBATCH --account=a_richardson
+```
+
+*Note: Fun fact. To comment out a line in the SBATCH, just put a space in between the hash (#) and the S. For example `# SBATCH --account=a_richardson`.*
+
+The second section is where I define all the directories. As mentioned above, defining your directories is one of the most important parts of working in the HPC.
+
+Here, my input directory is a subdirectory within my RDM.
+
+``` default
+INPUT_DIR="/QRISdata/Q7957/Repositories/01_depth_resolved_esms/00_raw_esm"
+echo $INPUT_DIR
+```
+
+You'll see that I like echoing the directories just for my peace of mind.
+
+When opening a compute node (interactive session or batch job) in the HPC, you automatically also create a temporary directory.
+
+``` default
+# this is the variable for the temporary directory
+TMP_DIR=$TMPDIR
+
+echo $TMP_DIR
+```
+
+This is where you can store intermediate files, but note that it is **temporary**. Once you exit your session (whether knowingly or not), all the contents of the temporary directory will be deleted.
+
+The third section is where you would load all your modules.
+
+``` default
+# Load R
+module purge
+module load r/4.4.0-combo-EPYC3-only
+```
+
+And the last section is where you would run your code.
+
+``` default
+# Run R script
+srun Rscript script.R $INPUT_DIR $TMP_DIR
+```
+
+`srun Rscript` is the function, `script.R` is the R script that will be ran from start to finish, and `$INPUT_DIR` is the first argument passed into your `script.R` and `$TMP_DIR` is the second argument passed into your R script. You can have as many arguments passed into your R script as possible.
+
+When you run your batch jobs, error (`.error`) and output (`.output`) files will be saved in the folder where you saved your Slurm scripts (`.job`). I'll talk about data structures in the Workflow below.
+
+To run a batch job, you need to save it with a `.job` extension in a folder in your `/scratch/` directory. All of the scripts required to run this batch job should also be in that folder. The code to run a batch job is:
+
+``` default
+# make sure that you are in the top level directory where the .job script is
+sbatch batch_script.job
+```
+
+And again, to check if your batch jobs are running, run `squeue --me` in your HPC terminal.
+
+# Workflow
+
+That's pretty much it in terms of the basics of the HPC. In order to practically use these I'll talk about how I do this in my workflow. Your workflow would look a bit different to mine, so bear that in mind :blush:
+
+**1. Write R scripts that are HPC ready.**
+
+This is an example script that I've written for my workflow.
+
+``` r
+# Written by: Tin Buenafe (k.buenafe@uq.edu.au)
+# 24/04/2025
+
+# Load packages
+library(hotrstuff) # make sure dev version is installed
+
+# Define directories
+args = commandArgs(trailingOnly = TRUE)
+INPUT_DIR = args[1]
+TMP_DIR = Sys.getenv("TMPDIR")
+
+htr_merge_files(
+    hpc = "parallel",
+    indir = file.path(INPUT_DIR),
+    outdir = file.path(TMP_DIR, "merged"),
+    year_start = 2020,
+    year_end = 2100
+)
+
+cat("Finished merging")
+```
+
+**2. Write Slurm scripts**
+
+The important bits here is that `htr_merge_files()` relies on arguments from the `srun RScript` function in the Slurm script.
+
+This is the Slurm script that I've used for this bit in my workflow.
+
+``` default
+#!/bin/bash --login
+#SBATCH --job-name=merge_thetao
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=5
+#SBATCH --mem=16G
+#SBATCH --time=36:00:00
+#SBATCH --qos=normal
+#SBATCH --partition=general
+#SBATCH --constraint=epyc3
+#SBATCH --batch=epyc3
+#SBATCH --account=a_richardson
+#SBATCH -o slurm-%j.output
+#SBATCH -e slurm-%j.error
+
+# Define directories
+INPUT_DIR="/QRISdata/Q7957/Repositories/01_depth_resolved_esms/00_raw_esm"
+OUTPUT_DIR="/QRISdata/Q7957/Repositories/01_depth_resolved_esms/01_merged"
+
+# Recalling files and making sure they are loaded fine in the RDM
+/usr/local/bin/recall_medici $INPUT_DIR
+
+# Make sure all loaded modules (if any) are purged
+module purge
+
+# Load cdo
+module use /home/$USER/EasyBuilt/modules/all
+module load cdo/2.2.2
+
+# Load R
+module load r/4.4.0-combo-EPYC3-only
+
+# Run R script
+srun Rscript 01_merge_thetao.r $INPUT_DIR
+
+echo -e "\nCopying to RDM"
+# Copy to RDM
+cp $TMPDIR/merged/* $OUTPUT_DIR
+echo -e "\nCopied to RDM"
+```
+
+All the outputs of `htr_merge_files()` are saved in the temporary directory. You can see at the last part of my code in the Slurm script, I copy them to my RDM.
+
+::: callout-note
+`/usr/local/bin/recall_medici $INPUT_DIR` is important to make sure that the data in your RDM are loaded properly before doing anything else. When untouched for a long time, some data can be archived (but still retrievable). Having this bit of code in your Slurm script ensures that your data is loaded in properly.
+:::
+
+**3. Move your stuff into your `/scratch/` (and in your RDM, if applicable)**
+
+I would usually do this using `sftp` (see the code above).
+
+**4. Make sure you're in the right directory in your HPC**
+
+Again, take advantage of some of the tips I've detailed above to do this.
+
+**5. Then run that batch script!**
+
+# Wrapping up
+
+This is a very basic way of working in the HPC but you can definitely add lots of complexity to it. The main thing I would suggest is get your files tidy and your data structures in the right order before anything else.
+
+But really, these are the notes I have as I work through the HPC. You'd just have to adapt them every time you write your own scripts :blush:. And a very valuable [resource](https://github.com/UQ-RCC/hpc-docs) for using UQ's HPC is on the UQ's RCC GitHub.

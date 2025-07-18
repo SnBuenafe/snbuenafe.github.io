@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="author" content="Tin Buenafe">
+<meta name="dcterms.date" content="2025-07-18">
+<title>Using the UQ HPC – Tin Buenafe</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<link href="../img/logo.png" rel="icon" type="image/png">
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><script src="../site_libs/clipboard-1.7.1/clipboard.min.js"></script><link href="../site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet">
+<link href="../site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet">
+<script src="../site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+</head>
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../img/logo.png" alt="" class="navbar-logo"></a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Tin Buenafe</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+<li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../posts.html"> 
+<span class="menu-text">Posts</span></a>
+  </li>  
+</ul>
+</div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+<li>
+<a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+<li><a href="#why-should-you-work-on-the-hpc" id="toc-why-should-you-work-on-the-hpc" class="nav-link" data-scroll-target="#why-should-you-work-on-the-hpc">Why should you work on the HPC?</a></li>
+  <li><a href="#store-data-in-your-rdm" id="toc-store-data-in-your-rdm" class="nav-link" data-scroll-target="#store-data-in-your-rdm">Store data in your RDM</a></li>
+  <li><a href="#use-visual-studio-code" id="toc-use-visual-studio-code" class="nav-link" data-scroll-target="#use-visual-studio-code">Use Visual Studio Code</a></li>
+  </ul>
+</li>
+  <li><a href="#access-the-hpc-using-your-terminal" id="toc-access-the-hpc-using-your-terminal" class="nav-link" data-scroll-target="#access-the-hpc-using-your-terminal">Access the HPC using your terminal</a></li>
+  <li><a href="#directories-in-the-hpc" id="toc-directories-in-the-hpc" class="nav-link" data-scroll-target="#directories-in-the-hpc">Directories in the HPC</a></li>
+  <li><a href="#accessing-your-rdm-in-the-hpc" id="toc-accessing-your-rdm-in-the-hpc" class="nav-link" data-scroll-target="#accessing-your-rdm-in-the-hpc">Accessing your RDM in the HPC</a></li>
+  <li>
+<a href="#file-transfer" id="toc-file-transfer" class="nav-link" data-scroll-target="#file-transfer">File transfer</a>
+  <ul class="collapse">
+<li><a href="#using-sftp" id="toc-using-sftp" class="nav-link" data-scroll-target="#using-sftp">Using <code>sftp</code></a></li>
+  <li><a href="#copying-to-the-hpc" id="toc-copying-to-the-hpc" class="nav-link" data-scroll-target="#copying-to-the-hpc">Copying to the HPC</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#using-r-in-the-hpc" id="toc-using-r-in-the-hpc" class="nav-link" data-scroll-target="#using-r-in-the-hpc">Using R in the HPC</a>
+  <ul class="collapse">
+<li><a href="#nodes-in-the-hpc" id="toc-nodes-in-the-hpc" class="nav-link" data-scroll-target="#nodes-in-the-hpc">Nodes in the HPC</a></li>
+  <li><a href="#interactive-sessions" id="toc-interactive-sessions" class="nav-link" data-scroll-target="#interactive-sessions">Interactive sessions</a></li>
+  <li><a href="#batch-jobs" id="toc-batch-jobs" class="nav-link" data-scroll-target="#batch-jobs">Batch jobs</a></li>
+  </ul>
+</li>
+  <li><a href="#workflow" id="toc-workflow" class="nav-link" data-scroll-target="#workflow">Workflow</a></li>
+  <li><a href="#wrapping-up" id="toc-wrapping-up" class="nav-link" data-scroll-target="#wrapping-up">Wrapping up</a></li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">Using the UQ HPC</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Tin Buenafe </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 18, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header><div class="cell">
+<div class="cell-output-display">
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('left', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+</div>
+</div>
+<section id="introduction" class="level1"><h1>Introduction</h1>
+<p>This is a compilation of notes that I’ve gathered as I work on the High Performance Computing Facilities (HPC) at the University of Queensland to develop climate trajectory models. While a lot of what will be covered here can be transferable to other HPC facilities, there will be certain intricacies that are specific to UQ’s [current] HPC (<em>Bunya</em>). These notes will also not replace the trainings offered by UQ’s Research Computing Centre (RCC) team: <a href="https://rcc.uq.edu.au/training-support/training-courses" class="uri">https://rcc.uq.edu.au/training-support/training-courses</a>. You can also attend <em>Hacky Hour</em> on Tuesdays or <em>vHPC support</em> on Thursdays weekly: <a href="https://rcc.uq.edu.au/training-support/meetups" class="uri">https://rcc.uq.edu.au/training-support/meetups</a>. I personally found attending these useful and David Green from UQ has been extremely helpful!</p>
+<p>In order to follow along, you’ll need to have an existing HPC account. This process may take some time, so if you are looking to work on the HPC sometime soon, better start on the paperwork! UQ has a lot of useful <a href="https://rcc.uq.edu.au/systems/high-performance-computing">documentation</a> to get you started on opening your HPC account.</p>
+<p>And for ease, I’ve prepared a <a href="https://github.com/SnBuenafe/HPC_notes/releases/download/v1.0.0/UQ_HPC_tutorial.zip">.zip file</a> with all of the materials we’ll be using today.</p>
+<section id="why-should-you-work-on-the-hpc" class="level2"><h2 class="anchored" data-anchor-id="why-should-you-work-on-the-hpc">Why should you work on the HPC?</h2>
+<p>If you’re currently running code that makes your RStudio crash, your monitor show that famous blue screen (if you’re on Windows) or if you can hear your machine struggle as it works through dozens of global climate models….. then you should probably consider using the HPC <span class="emoji" data-emoji="grimacing">😬</span>. If you already have code that works on your machine, then moving your workflow to the HPC should be doable. I’m not saying it’s easy, but it’s a very fruitful journey — one that I definitely don’t regret going through.</p>
+</section><section id="store-data-in-your-rdm" class="level2"><h2 class="anchored" data-anchor-id="store-data-in-your-rdm">Store data in your RDM</h2>
+<p>Again, this might be bespoke to UQ, but we are fortunate to have access to the UQ Research Data Manager (RDM), where students and staff can store and manage data related to their research. This is where I store all of my climate models and the code that I run in the HPC pulls data from my RDM and saves the finished outputs in my RDM as well. You can access your RDM through the <a href="https://cloud.rdm.uq.edu.au/index.php/apps/files/files">Cloud</a> but you can also access it through your terminal.</p>
+</section><section id="use-visual-studio-code" class="level2"><h2 class="anchored" data-anchor-id="use-visual-studio-code">Use Visual Studio Code</h2>
+<p>I can’t emphasize this enough, but using <a href="https://code.visualstudio.com/">Visual Studio Code (VSCode)</a> when coding and working on the HPC has been incredibly game-changing.</p>
+<p>Before, I’ve mainly used VSCode to write my bash scripts, but now, when working on my trajectory models, I (usually) don’t open RStudio anymore. I mostly work on VSCode. It has a lot of benefits, but the main benefit for me is being able to access my terminal, my scripts, and my directory in a very user-friendly manner. And you can open multiple panels of these — and they can all work simultaneously! <span class="emoji" data-emoji="exploding_head">🤯</span></p>
+<p>For example, in one window, I can have two terminals open—one running an interactive session in the HPC and one ready to run a batch job—and I can have two scripts open—one R script that I’m editing and one SLURM script to make sure that all my inputs into my HPC batch job are correct. Don’t worry, we’ll go through all these files shortly.</p>
+</section></section><section id="access-the-hpc-using-your-terminal" class="level1"><h1>Access the HPC using your terminal</h1>
+<p>It’s as simple as this code.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ssh USERNAME@bunya.rcc.uq.edu.au</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Change USERNAME to your actual username. For UQ staff, it should be your UQ staff ID, for UQ students (and most HDRs?), it should be your student number. And this is the annoying bit, but you’d need to have your Duo ready for two-factor authentication every time you access the HPC.</p>
+<p>To exit the HPC, simply type <code>exit</code> on your terminal and hit enter.</p>
+</section><section id="directories-in-the-hpc" class="level1"><h1>Directories in the HPC</h1>
+<p>You will have two general directories in the HPC: 1) your <code>/home/</code> directory; and 2) your <code>/scratch/</code> directory.</p>
+<p>When you log into the HPC, the default directory should be your <code>/home/</code> directory. Normally, you’ll save the things you care more about in your <code>/home/</code> directory. For example, outputs of some code you’ve ran in the HPC. Again, change <code>USERNAME</code> into your actual username (e.g., UQ staff ID or UQ student ID).</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a># to know what is the path of your /home/ directory</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>echo $HOME</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a># to change into your /home/ directory do either:</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>cd $HOME</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a># or</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>cd /home/USERNAME</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>/scratch/</code> directory is usually where you’ll save code that you’ll run in interactive sessions or batch jobs. You shouldn’t save the outputs you care about in your <code>/scratch/</code> because this gets refreshed (i.e., purged) more frequently.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a># to change into your /scratch/ directory</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cd /scratch/user/USERNAME</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a># instead of manually writing down your username, you can also use this code</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>echo $USER</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>cd /scratch/user/$USER</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section><section id="accessing-your-rdm-in-the-hpc" class="level1"><h1>Accessing your RDM in the HPC</h1>
+<p>Again, this might be bespoke to UQ’s HPC, but when you’re creating an RDM, make sure that it’s the <strong>Q</strong> type so that you can access it easily in your HPC.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a># note: this code won't work for you because you don't have access to my RDM :)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cd /QRISdata/Q7957</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You can also access RDMs of collaborators that you have access to.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a># note: this code won't work for you because you don't have access to Alvise's RDM :)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>cd /QRISdata/Q7384</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section><section id="file-transfer" class="level1"><h1>File transfer</h1>
+<p>There are two ways you can use the HPC. You can code on the fly in interactive sessions in the HPC but you can also copy the scripts that are already working in your machine into the HPC. In order to do that, you need to know how to transfer files from your local machine into the HPC (or the RDM).</p>
+<section id="using-sftp" class="level2"><h2 class="anchored" data-anchor-id="using-sftp">Using <code>sftp</code>
+</h2>
+<p>I like to use <a href="https://www.digitalocean.com/community/tutorials/how-to-use-sftp-to-securely-transfer-files-with-a-remote-server">Secure File Transfer Protocol (SFTP)</a> to transfer my files into a remote server.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a># to access SFTP</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sftp USERNAME@bunya.rcc.uq.edu.au</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To know the different things you can do using <code>sftp</code> and the syntax, type in <code>help</code> in your terminal. But some of my go-to functions are the following:</p>
+<ol type="1">
+<li>Checking which local directory I’m in using <code>lpwd</code>
+</li>
+<li>Checking which remote directory I’m in using <code>pwd</code>
+</li>
+<li>Changing my local directory using <code>lcd NEW_LOCAL_WORKING_DIRECTORY</code>
+</li>
+<li>Changing my remote directory using <code>cd NEW_REMOTE_WORKING_DIRECTORY</code>
+</li>
+<li>Transferring local files to the remote directory using <code>put -Pr LOCAL_FILES</code>. <code>-P</code> keeps all of the information and permissions from the original file. <code>-r</code> recursively copies everything in that local directory into the remote one.</li>
+<li>Downloading files from your remote directory to the local directory using <code>get -Pr REMOTE_FILES LOCAL_DIRECTORY</code>
+</li>
+</ol>
+<p>Now, let’s try out some of this stuff using CanESM5 surface temperature projections (SSP3-7.0). The data that I’m going to use to demonstrate the HPC workflow are climate data (<code>.nc</code> files) downloaded from the <a href="https://esgf.nci.org.au/search">ESGF MetaGrid</a>. In the <code>.zip</code> file that I shared, it should be in the <code>Data/raw/</code> folder.</p>
+<p>Let’s try to upload this data into our <code>/scratch/</code> directories into a folder named <code>trial</code>. Note that I like to do this step in the HPC and not really using SFTP because whenever I tried making a new directory using SFTP, it fails because I don’t have the right permissions <span class="emoji" data-emoji="woman_shrugging">🤷‍♀️</span></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a># if you haven't already, log into the HPC</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>ssh USERNAME@bunya.rcc.uq.edu.au</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a># then make sure you're in the /scratch/ directory</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>cd /scratch/user/$USER</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a># then make a folder</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>mkdir trial</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a># check if the folder was actually created</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>ls</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now that you have your folder, access this remote server using SFTP. If you’re using your RStudio to code, you’d have to exit the HPC using <code>exit</code>. But if you’re using VSCode, you can just open a new terminal <span class="emoji" data-emoji="zany_face">🤪</span></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a># access the remote server using SFTP</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sftp USERNAME@bunya.rcc.uq.edu.au</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a># what's our local directory?</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>lpwd # this should be something like ~/Documents/GitHub/HPC_notes (or whatever the directory is of your repository)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a># let's move into the Data folder as the local directory</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>lcd Data/raw_esms</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a># check the different files in the local directory</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>lls</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a># what's our remote directory?</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>pwd # this should be your /home/ by default</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a># let's change this to our `trial` folder in our scratch</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>cd /scratch/user/USERNAME/trial # NOTE: $USER won't work in SFTP</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now, let’s upload the netcdf file into the <code>trial</code> folder in our <code>/scratch/</code> directory.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>put -Pr .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You might see that multiple (hidden) files have been uploaded as well! That’s because we haven’t specified the file type.</p>
+<p>The <code>.</code> above refers to the set local directory and because we have used the -r (recursive option), all of the files will upload. In real life though, we’ll have loads of different file types in the same folder… If we want to specify to only upload netcdf files, your code could look like something like this:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>put -Pr *.nc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You can also specify specific files you want uploaded:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>put -Pr filename.tif</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a># or if a file is within a subfolder of the set local directory</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a># for example, if we only set our local directory to be the top level of this repo, the code would look something like:</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>put -Pr Data/raw_esms/tos_Omon_CanESM5_ssp370_r1i1p1f1_gn_201501-210012.nc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now, the <code>.nc</code> file should’ve been uploaded into <code>/scratch/user/$USER/trial</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a># let's take a look</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>ls</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>I usually use <code>sftp</code> to transfer files from my local machine into the HPC or into my RDM. But if I’m transferring files across different folders within the HPC, I will use Secure Copy (<code>scp</code>). <em>But</em>, you can use <code>scp</code> to do what I just did above using <code>sftp</code>: read more <a href="https://linuxize.com/post/how-to-use-scp-command-to-securely-transfer-files/">here</a>. I usually only do this when I need to do a very quick copy (e.g., if I uploaded the wrong R script).</p>
+</div>
+</div>
+</div>
+</section><section id="copying-to-the-hpc" class="level2"><h2 class="anchored" data-anchor-id="copying-to-the-hpc">Copying to the HPC</h2>
+<p>We can easily copy files across different folders in the HPC. Let’s say we want to copy the <code>.nc</code> file that’s currently sitting in our <code>/scratch/</code> directories into our <code>/home/</code> directory.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a># let's first create a directory in home</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>cd $HOME/Documents</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>mkdir trial_home</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a># now we can copy over the netcdf file</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>cp /scratch/user/$USER/trial/*.nc /$HOME/Documents/trial_home</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a># let's check if it was copied over</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>ls trial_home</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We can also easily delete files using <code>rm</code>.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>rm trial_home/* # delete all files</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a># you can also specify the files. For example, if you just want to delete all netcdf files, your code will look something like this:</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>rm trial_home/*.nc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You’ll find that you can’t delete everything in a directory if you have subdirectories in it. To illustrate this, copy the following code into your terminal:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a># let's make a subdirectory within `trial_home`</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>mkdir trial_home/subdirectory</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a># let's copy over the netcdf file into `trial_home`</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>cp /scratch/user/$USER/trial/*.nc /$HOME/Documents/trial_home</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a># let's make sure you now have an empty subdirectory called `subdirectory` and the netcdf file within your `trial_home` directory</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>ls trial_home</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a># now let's try to delete all files</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>rm trial_home/*</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You’ll find that the netcdf file has been deleted, but not the empty subdirectory. This is because you can only remove files using the <code>rm</code> function. To delete an <strong>empty</strong> directory, you need to use <code>rmdir</code>.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>rmdir trial_home</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>But why is this still erroring? That’s because <code>trial_home</code> is technically not empty. It still has <code>subdirectory</code> in it. You can now do this manually by first deleting all the files within all the subdirectories, then deleting each empty subdirectory (and maybe subsubdirectory… if you know what I mean) individually using <code>rmdir</code>.</p>
+<p>Now, this is <strong>very</strong> tedious, but this was done for a reason. This was so that users do not just carelessly delete everything in a directory. But what if you are very certain that you want this directory gone?</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>rm -rf trial_home</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>-f</code> flag means “force” and, again, the <code>-r</code> flag means “recursive”. Only use this code when you’re absolutely sure you want to delete the whole directory.</p>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>You can also easily upload files into your RDM through SFTP. You’d just have to follow the same steps as above but change the remote directory’s path into your RDM’s path (e.g., <code>/QRISdata/Q7957/</code>).</p>
+</div>
+</div>
+</div>
+</section></section><section id="using-r-in-the-hpc" class="level1"><h1>Using R in the HPC</h1>
+<p>Now, I’m going to demonstrate how to run some R code in the HPC. If you already know how to code in R, running some R code in the HPC should be doable. It’s definitely handy to know how to code in shell and/or bash, but I’d say that the most difficult part about working in the HPC is learning how to call what and where to do what.</p>
+<p>As I mentioned above, typically you have three different “locations” where your data, scripts, and other stuff lie: 1) <code>/home/</code> directory; 2) <code>/scratch/</code> directory; and 3) your RDM.</p>
+<p>This is how I typically handle my files:</p>
+<ul>
+<li>All of big inputs and outputs (e.g., netcdf, shapefiles, rds files) of my code ran in the HPC are found in my RDM.</li>
+<li>Scripts (R scripts, SLURM scripts) and smaller inputs (e.g., .csv files) that are needed to run my workflow are found in my <code>/scratch/</code>
+</li>
+<li>I don’t really put anything in my <code>/home/</code>, but technically I could put my output files from my scripts there.</li>
+</ul>
+<section id="nodes-in-the-hpc" class="level2"><h2 class="anchored" data-anchor-id="nodes-in-the-hpc">Nodes in the HPC</h2>
+<p>There are two different nodes (that I know of) in the HPC.</p>
+<p>The “log-in” node is the default node you get into when you log into your HPC allocation. I would only stay in this node if I’m <strong>not</strong> doing any computations. Simply just looking around at files or file structures.</p>
+<p>The “compute” node is where you run your code. There are two ways you can get into a compute node:</p>
+<ol type="1">
+<li>Interactive sessions - where you can run R code like you could in an R console</li>
+<li>Batch job - where you could send a big job into the HPC and it runs it all for you from start to finish.</li>
+</ol></section><section id="interactive-sessions" class="level2"><h2 class="anchored" data-anchor-id="interactive-sessions">Interactive sessions</h2>
+<p>This is the basic way to open an interactive session within the HPC.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>salloc --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --mem=5G --job-name=InteractiveTrial --time=01:00:00 --partition=general --qos=debug --account=a_richardson srun --export=PATH,TERM,HOME,LANG --pty /bin/bash -l</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>I’m not going to define all of the parameters here, but here are some important ones that I usually change:</p>
+<ul>
+<li>
+<code>mem</code>: memory allocated</li>
+<li>
+<code>job-name</code>: your interactive session’s name. You’d see this code when you’re looking at the different jobs you have opened</li>
+<li>
+<code>time</code>: how long your need your interactive session to be. You’d want to put more time than you think you’d need because you can <code>exit</code> a session easily</li>
+<li>
+<code>account</code>: your group’s account name</li>
+</ul>
+<p>I don’t usually change <code>nodes</code>, <code>ntasks-per-node</code> and <code>cpus</code> because if I’d need more than these, I would not open an interactive session, but instead submit a batch job. Typically, you don’t want your interactive session to be taking up too much space.</p>
+<p>When you run this code, you’ll notice that you’re currently working on a separate compute node (e.g., <code>bunxxx</code>).</p>
+<p>To check your jobs that are running, run <code>squeue --me</code>.</p>
+<div class=".callout-note">
+<p>What is <strong>epyc3</strong>?</p>
+<p>The HPC has lots of different things available for their users, but using the HPC is not <em>really</em> the same as having your own RStudio. Sometimes, you might want to install your own package or use a different version of packages available in the HPC. We’ll talk about the different modules available further down this tutorial.</p>
+<p>For using the HPC on average, you’ll probably only have to encounter <strong>epyc4</strong> compute nodes. This is the most up-to-date compute node that UQ has. But, access to the older <strong>epyc3</strong> node is still available.</p>
+<p><em>But when should I use epyc3?</em></p>
+<p>I typically use epyc3 in my workflows because I use Climate Data Operators (cdo) in an R environment (which is not really available in epyc4). Things built (e.g., packages installed) in epyc4 cannot be used in an epyc3 node, BUT things built in epyc3 nodes can be used in an epyc4 node.</p>
+<p>To open an epyc3 interactive session, this is the code you’d need to run:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>salloc --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --mem=5G --job-name=InteractiveTrial --time=01:00:00 --partition=general --qos=debug --constraint=epyc3 --account=a_richardson srun --export=PATH,TERM,HOME,LANG --pty /bin/bash -l</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So really, you’d only need to add <code>constraint</code>.</p>
+</div>
+<p>Now that we have gotten an interactive session on, let’s try to run R.</p>
+<p>R (and other languages) in the HPC are called <strong>modules</strong>. It’s typically best practice to “purge” all running modules before you load any new ones to avoid unwanted interactions.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>module purge</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now, let’s look at the different available R modules.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a># print all modules that have "r" in it</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>module avail r</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a># this shows a lot of different modules that are not even R</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a># to make this output more specific</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>module avail r/4.4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You should be seeing a couple of different versions. To know which one you’d use, I would suggest talking to David Green first, but typically if you’re using some of the basic R stuff, you’d just need to load <code>r/4.4.2</code>. <code>r/4.4.2-heavy</code> is just <code>r/4.4.2</code> but with a lot more available packages. It just takes up more memory in your system because once you load this module, all of the packages are also installed in your node.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>module load r/4.4.2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now that the module has been loaded, we can now start R like this. I’m actually not sure why there’s <code>--vanilla</code> in the code (this is just what David Green taught me), but I’m sure you can start R just by inputting <code>R</code>.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>R --vanilla</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now, we can try to run some basic R stuff.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fl">1</span><span class="op">+</span><span class="fl">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Packages should be loaded up as well. If not, you should be able to just install packages using <code>install.packages("package_name")</code>.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span><span class="op">(</span><span class="op">~</span><span class="va">colA</span>, <span class="op">~</span><span class="va">colB</span>,</span>
+<span>              <span class="st">"a"</span>,   <span class="fl">1</span>,</span>
+<span>              <span class="st">"b"</span>,   <span class="fl">2</span>,</span>
+<span>              <span class="st">"c"</span>,   <span class="fl">3</span></span>
+<span>              <span class="op">)</span></span>
+<span><span class="va">dat</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/quit.html">q</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># quit R session</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now you know how to use R in an interactive session in the HPC! Let’s now <code>exit</code> from the interactive session because if you don’t, you also reduce your “fair share”.</p>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Fair share</strong> refers to your priority in the queue of HPC users. The more you use more CPUs, more memory, more time, the more your fair share goes down. If your fair share is low, whenever you run a big batch job, your number in the queue is low, and you might have to wait longer.</p>
+<p>Don’t worry though, your fair share reloads <span class="emoji" data-emoji="grinning">😀</span> (I think every quarter?)</p>
+</div>
+</div>
+</div>
+</section><section id="batch-jobs" class="level2"><h2 class="anchored" data-anchor-id="batch-jobs">Batch jobs</h2>
+<p>The main reason why I wanted to work in the HPC is that I already have a working workflow that I want to run in the HPC. To run these workflows, I would recommend submitting a batch job instead of working on it in an interactive session.</p>
+<p>Batch jobs are defined using Slurm scripts, which looks like this. This is how my regular Slurm scripts look like.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>#!bin/bash --login</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>#SBATCH --job-name=climate_wrangling_1</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>#SBATCH --nodes=1</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>#SBATCH --ntasks=1</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>#SBATCH --cpus-per-task=2</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>#SBATCH --mem=16G</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>#SBATCH --time=36:00:00</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>#SBATCH --qos=normal</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>#SBATCH --partition=general</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>#SBATCH --constraint=epyc3</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>#SBATCH --batch=epyc3</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>#SBATCH --account=a_richardson</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a># Define directories</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>INPUT_DIR="/QRISdata/Q7957/Repositories/01_depth_resolved_esms/00_raw_esm"</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>echo $INPUT_DIR</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>TMP_DIR=$TMPDIR</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>echo $TMP_DIR</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a># Load R</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>module purge</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>module load r/4.4.0-combo-EPYC3-only</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a># Run R script</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>srun Rscript script.R $INPUT_DIR # and all the other inputs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So there are different sections to this Slurm script. Let’s dive into it one section at a time.</p>
+<p>The first section refers to the different parameters of the batch job. Some of these parameters are similar to those that we had for an interactive session.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a># section 1</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>#!bin/bash --login</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>#SBATCH --job-name=climate_wrangling_1</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>#SBATCH --nodes=1</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>#SBATCH --ntasks=1</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>#SBATCH --cpus-per-task=2</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>#SBATCH --mem=16G</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>#SBATCH --time=36:00:00</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>#SBATCH --qos=normal</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>#SBATCH --partition=general</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>#SBATCH --constraint=epyc3</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>#SBATCH --batch=epyc3</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>#SBATCH --account=a_richardson</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><em>Note: Fun fact. To comment out a line in the SBATCH, just put a space in between the hash (#) and the S. For example <code># SBATCH --account=a_richardson</code>.</em></p>
+<p>The second section is where I define all the directories. As mentioned above, defining your directories is one of the most important parts of working in the HPC.</p>
+<p>Here, my input directory is a subdirectory within my RDM.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>INPUT_DIR="/QRISdata/Q7957/Repositories/01_depth_resolved_esms/00_raw_esm"</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>echo $INPUT_DIR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You’ll see that I like echoing the directories just for my peace of mind.</p>
+<p>When opening a compute node (interactive session or batch job) in the HPC, you automatically also create a temporary directory.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a># this is the variable for the temporary directory</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>TMP_DIR=$TMPDIR</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>echo $TMP_DIR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This is where you can store intermediate files, but note that it is <strong>temporary</strong>. Once you exit your session (whether knowingly or not), all the contents of the temporary directory will be deleted.</p>
+<p>The third section is where you would load all your modules.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a># Load R</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>module purge</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>module load r/4.4.0-combo-EPYC3-only</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And the last section is where you would run your code.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a># Run R script</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>srun Rscript script.R $INPUT_DIR $TMP_DIR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>srun Rscript</code> is the function, <code>script.R</code> is the R script that will be ran from start to finish, and <code>$INPUT_DIR</code> is the first argument passed into your <code>script.R</code> and <code>$TMP_DIR</code> is the second argument passed into your R script. You can have as many arguments passed into your R script as possible.</p>
+<p>When you run your batch jobs, error (<code>.error</code>) and output (<code>.output</code>) files will be saved in the folder where you saved your Slurm scripts (<code>.job</code>). I’ll talk about data structures in the Workflow below.</p>
+<p>To run a batch job, you need to save it with a <code>.job</code> extension in a folder in your <code>/scratch/</code> directory. All of the scripts required to run this batch job should also be in that folder. The code to run a batch job is:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a># make sure that you are in the top level directory where the .job script is</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>sbatch batch_script.job</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And again, to check if your batch jobs are running, run <code>squeue --me</code> in your HPC terminal.</p>
+</section></section><section id="workflow" class="level1"><h1>Workflow</h1>
+<p>That’s pretty much it in terms of the basics of the HPC. In order to practically use these I’ll talk about how I do this in my workflow. Your workflow would look a bit different to mine, so bear that in mind <span class="emoji" data-emoji="blush">😊</span></p>
+<p><strong>1. Write R scripts that are HPC ready.</strong></p>
+<p>This is an example script that I’ve written for my workflow.</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Written by: Tin Buenafe (k.buenafe@uq.edu.au)</span></span>
+<span><span class="co"># 24/04/2025</span></span>
+<span></span>
+<span><span class="co"># Load packages</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/SnBuenafe/hotrstuff">hotrstuff</a></span><span class="op">)</span> <span class="co"># make sure dev version is installed</span></span>
+<span></span>
+<span><span class="co"># Define directories</span></span>
+<span><span class="va">args</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/commandArgs.html">commandArgs</a></span><span class="op">(</span>trailingOnly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">INPUT_DIR</span> <span class="op">=</span> <span class="va">args</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">TMP_DIR</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"TMPDIR"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/hotrstuff/man/htr_merge_files.html">htr_merge_files</a></span><span class="op">(</span></span>
+<span>    hpc <span class="op">=</span> <span class="st">"parallel"</span>,</span>
+<span>    indir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">INPUT_DIR</span><span class="op">)</span>,</span>
+<span>    outdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">TMP_DIR</span>, <span class="st">"merged"</span><span class="op">)</span>,</span>
+<span>    year_start <span class="op">=</span> <span class="fl">2020</span>,</span>
+<span>    year_end <span class="op">=</span> <span class="fl">2100</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"Finished merging"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>2. Write Slurm scripts</strong></p>
+<p>The important bits here is that <code><a href="https://rdrr.io/pkg/hotrstuff/man/htr_merge_files.html">htr_merge_files()</a></code> relies on arguments from the <code>srun RScript</code> function in the Slurm script.</p>
+<p>This is the Slurm script that I’ve used for this bit in my workflow.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>#!/bin/bash --login</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>#SBATCH --job-name=merge_thetao</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>#SBATCH --nodes=1</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>#SBATCH --ntasks=1</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>#SBATCH --cpus-per-task=5</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>#SBATCH --mem=16G</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>#SBATCH --time=36:00:00</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>#SBATCH --qos=normal</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>#SBATCH --partition=general</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>#SBATCH --constraint=epyc3</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>#SBATCH --batch=epyc3</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>#SBATCH --account=a_richardson</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>#SBATCH -o slurm-%j.output</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>#SBATCH -e slurm-%j.error</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a># Define directories</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>INPUT_DIR="/QRISdata/Q7957/Repositories/01_depth_resolved_esms/00_raw_esm"</span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>OUTPUT_DIR="/QRISdata/Q7957/Repositories/01_depth_resolved_esms/01_merged"</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a># Recalling files and making sure they are loaded fine in the RDM</span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>/usr/local/bin/recall_medici $INPUT_DIR</span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a># Make sure all loaded modules (if any) are purged</span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>module purge</span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a># Load cdo</span>
+<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>module use /home/$USER/EasyBuilt/modules/all</span>
+<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a>module load cdo/2.2.2</span>
+<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a># Load R</span>
+<span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a>module load r/4.4.0-combo-EPYC3-only</span>
+<span id="cb34-32"><a href="#cb34-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-33"><a href="#cb34-33" aria-hidden="true" tabindex="-1"></a># Run R script</span>
+<span id="cb34-34"><a href="#cb34-34" aria-hidden="true" tabindex="-1"></a>srun Rscript 01_merge_thetao.r $INPUT_DIR</span>
+<span id="cb34-35"><a href="#cb34-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-36"><a href="#cb34-36" aria-hidden="true" tabindex="-1"></a>echo -e "\nCopying to RDM"</span>
+<span id="cb34-37"><a href="#cb34-37" aria-hidden="true" tabindex="-1"></a># Copy to RDM</span>
+<span id="cb34-38"><a href="#cb34-38" aria-hidden="true" tabindex="-1"></a>cp $TMPDIR/merged/* $OUTPUT_DIR</span>
+<span id="cb34-39"><a href="#cb34-39" aria-hidden="true" tabindex="-1"></a>echo -e "\nCopied to RDM"</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>All the outputs of <code><a href="https://rdrr.io/pkg/hotrstuff/man/htr_merge_files.html">htr_merge_files()</a></code> are saved in the temporary directory. You can see at the last part of my code in the Slurm script, I copy them to my RDM.</p>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><code>/usr/local/bin/recall_medici $INPUT_DIR</code> is important to make sure that the data in your RDM are loaded properly before doing anything else. When untouched for a long time, some data can be archived (but still retrievable). Having this bit of code in your Slurm script ensures that your data is loaded in properly.</p>
+</div>
+</div>
+</div>
+<p><strong>3. Move your stuff into your <code>/scratch/</code> (and in your RDM, if applicable)</strong></p>
+<p>I would usually do this using <code>sftp</code> (see the code above).</p>
+<p><strong>4. Make sure you’re in the right directory in your HPC</strong></p>
+<p>Again, take advantage of some of the tips I’ve detailed above to do this.</p>
+<p><strong>5. Then run that batch script!</strong></p>
+</section><section id="wrapping-up" class="level1"><h1>Wrapping up</h1>
+<p>This is a very basic way of working in the HPC but you can definitely add lots of complexity to it. The main thing I would suggest is get your files tidy and your data structures in the right order before anything else.</p>
+<p>But really, these are the notes I have as I work through the HPC. You’d just have to adapt them every time you write your own scripts <span class="emoji" data-emoji="blush">😊</span>. And a very valuable <a href="https://github.com/UQ-RCC/hpc-docs">resource</a> for using UQ’s HPC is on the UQ’s RCC GitHub.</p>
+
+
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

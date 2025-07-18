@@ -2,11 +2,16 @@ website:
   title: "Tin Buenafe"
   description: "UQ PhD candidate | Climate-smart MSP"
   
-  favicon: img/logo_compressed.png
+  favicon: img/logo.png
   
   navbar:
     pinned: true
     logo: img/logo.png
+    left:
+        - text: "Home"
+          href: index.qmd
+        - text: "Posts"
+          href: posts.qmd
     
   search: false
 
@@ -26,7 +31,7 @@ execute:
 format:
   html:
     theme: 
-      - pulse
+      - yeti
       - html/styles.scss
     toc: false
     code-link: true
