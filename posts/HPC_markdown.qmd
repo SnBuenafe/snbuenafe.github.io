@@ -304,7 +304,6 @@ When you run this code, you'll notice that you're currently working on a separat
 To check your jobs that are running, run `squeue --me`.
 
 ::: callout-note
-
 What is **epyc3**?
 
 The HPC has lots of different things available for their users, but using the HPC is not *really* the same as having your own RStudio. Sometimes, you might want to install your own package or use a different version of packages available in the HPC. We'll talk about the different modules available further down this tutorial.
@@ -322,7 +321,6 @@ salloc --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --mem=5G --job-name=Inter
 ```
 
 So really, you'd only need to add `constraint`. 
-
 :::
 
 Now that we have gotten an interactive session on, let's try to run R.
