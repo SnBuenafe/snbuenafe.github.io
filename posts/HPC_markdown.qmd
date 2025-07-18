@@ -303,7 +303,7 @@ When you run this code, you'll notice that you're currently working on a separat
 
 To check your jobs that are running, run `squeue --me`.
 
-::: .callout-note
+::: callout-note
 
 What is **epyc3**?
 
