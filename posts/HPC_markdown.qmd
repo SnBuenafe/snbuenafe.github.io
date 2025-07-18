@@ -28,6 +28,8 @@ This is a compilation of notes that I've gathered as I work on the High Performa
 
 In order to follow along, you'll need to have an existing HPC account. This process may take some time, so if you are looking to work on the HPC sometime soon, better start on the paperwork! UQ has a lot of useful [documentation](https://rcc.uq.edu.au/systems/high-performance-computing) to get you started on opening your HPC account.
 
+And for ease, I've prepared a [.zip file](https://github.com/SnBuenafe/HPC_notes/releases/download/v1.0.0/UQ_HPC_tutorial.zip) with all of the materials we'll be using today.
+
 ## Why should you work on the HPC?
 
 If you're currently running code that makes your RStudio crash, your monitor show that famous blue screen (if you're on Windows) or if you can hear your machine struggle as it works through dozens of global climate models..... then you should probably consider using the HPC :grimacing:. If you already have code that works on your machine, then moving your workflow to the HPC should be doable. I'm not saying it's easy, but it's a very fruitful journey — one that I definitely don't regret going through.
