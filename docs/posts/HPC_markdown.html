@@ -381,7 +381,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>I don’t usually change <code>nodes</code>, <code>ntasks-per-node</code> and <code>cpus</code> because if I’d need more than these, I would not open an interactive session, but instead submit a batch job. Typically, you don’t want your interactive session to be taking up too much space.</p>
 <p>When you run this code, you’ll notice that you’re currently working on a separate compute node (e.g., <code>bunxxx</code>).</p>
 <p>To check your jobs that are running, run <code>squeue --me</code>.</p>
-<div class=".callout-note">
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
 <p>What is <strong>epyc3</strong>?</p>
 <p>The HPC has lots of different things available for their users, but using the HPC is not <em>really</em> the same as having your own RStudio. Sometimes, you might want to install your own package or use a different version of packages available in the HPC. We’ll talk about the different modules available further down this tutorial.</p>
 <p>For using the HPC on average, you’ll probably only have to encounter <strong>epyc4</strong> compute nodes. This is the most up-to-date compute node that UQ has. But, access to the older <strong>epyc3</strong> node is still available.</p>
@@ -390,6 +395,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>To open an epyc3 interactive session, this is the code you’d need to run:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>salloc --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --mem=5G --job-name=InteractiveTrial --time=01:00:00 --partition=general --qos=debug --constraint=epyc3 --account=a_richardson srun --export=PATH,TERM,HOME,LANG --pty /bin/bash -l</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>So really, you’d only need to add <code>constraint</code>.</p>
+</div>
+</div>
 </div>
 <p>Now that we have gotten an interactive session on, let’s try to run R.</p>
 <p>R (and other languages) in the HPC are called <strong>modules</strong>. It’s typically best practice to “purge” all running modules before you load any new ones to avoid unwanted interactions.</p>
