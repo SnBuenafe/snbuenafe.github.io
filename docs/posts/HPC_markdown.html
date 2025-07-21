@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.5.57">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Tin Buenafe">
-<meta name="dcterms.date" content="2025-07-18">
+<meta name="dcterms.date" content="2025-07-21">
 <title>Using the UQ HPC – Tin Buenafe</title>
 <style>
 code{white-space: pre-wrap;}
@@ -169,7 +169,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 18, 2025</p>
+      <p class="date">July 21, 2025</p>
     </div>
   </div>
   
@@ -189,7 +189,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="introduction" class="level1"><h1>Introduction</h1>
 <p>This is a compilation of notes that I’ve gathered as I work on the High Performance Computing Facilities (HPC) at the University of Queensland to develop climate trajectory models. While a lot of what will be covered here can be transferable to other HPC facilities, there will be certain intricacies that are specific to UQ’s [current] HPC (<em>Bunya</em>). These notes will also not replace the trainings offered by UQ’s Research Computing Centre (RCC) team: <a href="https://rcc.uq.edu.au/training-support/training-courses" class="uri">https://rcc.uq.edu.au/training-support/training-courses</a>. You can also attend <em>Hacky Hour</em> on Tuesdays or <em>vHPC support</em> on Thursdays weekly: <a href="https://rcc.uq.edu.au/training-support/meetups" class="uri">https://rcc.uq.edu.au/training-support/meetups</a>. I personally found attending these useful and David Green from UQ has been extremely helpful!</p>
 <p>In order to follow along, you’ll need to have an existing HPC account. This process may take some time, so if you are looking to work on the HPC sometime soon, better start on the paperwork! UQ has a lot of useful <a href="https://rcc.uq.edu.au/systems/high-performance-computing">documentation</a> to get you started on opening your HPC account.</p>
-<p>And for ease, I’ve prepared a <a href="https://github.com/SnBuenafe/HPC_notes/releases/download/v1.0.0/UQ_HPC_tutorial.zip">.zip file</a> with all of the materials we’ll be using today.</p>
 <section id="why-should-you-work-on-the-hpc" class="level2"><h2 class="anchored" data-anchor-id="why-should-you-work-on-the-hpc">Why should you work on the HPC?</h2>
 <p>If you’re currently running code that makes your RStudio crash, your monitor show that famous blue screen (if you’re on Windows) or if you can hear your machine struggle as it works through dozens of global climate models….. then you should probably consider using the HPC <span class="emoji" data-emoji="grimacing">😬</span>. If you already have code that works on your machine, then moving your workflow to the HPC should be doable. I’m not saying it’s easy, but it’s a very fruitful journey — one that I definitely don’t regret going through.</p>
 </section><section id="store-data-in-your-rdm" class="level2"><h2 class="anchored" data-anchor-id="store-data-in-your-rdm">Store data in your RDM</h2>
@@ -203,6 +202,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ssh USERNAME@bunya.rcc.uq.edu.au</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Change USERNAME to your actual username. For UQ staff, it should be your UQ staff ID, for UQ students (and most HDRs?), it should be your student number. And this is the annoying bit, but you’d need to have your Duo ready for two-factor authentication every time you access the HPC.</p>
 <p>To exit the HPC, simply type <code>exit</code> on your terminal and hit enter.</p>
+<div class=".callout-note">
+<p>You can also “cancel” a specific allocation within the HPC.</p>
+<p>First, learn the <code>JOBID</code> of your allocation by inputting <code>squeue --me</code>. Then, run <code>scancel JOBID</code> in your terminal.</p>
+</div>
 </section><section id="directories-in-the-hpc" class="level1"><h1>Directories in the HPC</h1>
 <p>You will have two general directories in the HPC: 1) your <code>/home/</code> directory; and 2) your <code>/scratch/</code> directory.</p>
 <p>When you log into the HPC, the default directory should be your <code>/home/</code> directory. Normally, you’ll save the things you care more about in your <code>/home/</code> directory. For example, outputs of some code you’ve ran in the HPC. Again, change <code>USERNAME</code> into your actual username (e.g., UQ staff ID or UQ student ID).</p>
@@ -413,15 +416,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Now that the module has been loaded, we can now start R like this. I’m actually not sure why there’s <code>--vanilla</code> in the code (this is just what David Green taught me), but I’m sure you can start R just by inputting <code>R</code>.</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>R --vanilla</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Now, we can try to run some basic R stuff.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fl">1</span><span class="op">+</span><span class="fl">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Packages should be loaded up as well. If not, you should be able to just install packages using <code>install.packages("package_name")</code>.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span><span class="op">(</span><span class="op">~</span><span class="va">colA</span>, <span class="op">~</span><span class="va">colB</span>,</span>
 <span>              <span class="st">"a"</span>,   <span class="fl">1</span>,</span>
 <span>              <span class="st">"b"</span>,   <span class="fl">2</span>,</span>
 <span>              <span class="st">"c"</span>,   <span class="fl">3</span></span>
 <span>              <span class="op">)</span></span>
-<span><span class="va">dat</span></span>
+<span><span class="va">dat</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Packages should be loaded up as well. If not, you should be able to just install packages using <code>install.packages("package_name")</code>. The line of code below needs <code>terra</code>.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># install.packages(c("terra"))</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/">terra</a></span><span class="op">)</span></span>
+<span><span class="va">temp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html">rast</a></span><span class="op">(</span><span class="st">"tos_Omon_CanESM5_ssp370_r1i1p1f1_gn_201501-210012.nc"</span><span class="op">)</span></span>
+<span><span class="va">temp</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/quit.html">q</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># quit R session</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Now you know how to use R in an interactive session in the HPC! Let’s now <code>exit</code> from the interactive session because if you don’t, you also reduce your “fair share”.</p>
 <div class="callout callout-style-simple callout-note">
@@ -438,7 +444,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section><section id="batch-jobs" class="level2"><h2 class="anchored" data-anchor-id="batch-jobs">Batch jobs</h2>
 <p>The main reason why I wanted to work in the HPC is that I already have a working workflow that I want to run in the HPC. To run these workflows, I would recommend submitting a batch job instead of working on it in an interactive session.</p>
 <p>Batch jobs are defined using Slurm scripts, which looks like this. This is how my regular Slurm scripts look like.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>#!bin/bash --login</span>
+<div class="sourceCode" id="cb26"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>#!/bin/bash --login</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>#SBATCH --job-name=climate_wrangling_1</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>#SBATCH --nodes=1</span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>#SBATCH --ntasks=1</span>
@@ -466,7 +472,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>So there are different sections to this Slurm script. Let’s dive into it one section at a time.</p>
 <p>The first section refers to the different parameters of the batch job. Some of these parameters are similar to those that we had for an interactive session.</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a># section 1</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>#!bin/bash --login</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>#!/bin/bash --login</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>#SBATCH --job-name=climate_wrangling_1</span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>#SBATCH --nodes=1</span>
 <span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>#SBATCH --ntasks=1</span>
@@ -477,7 +483,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>#SBATCH --partition=general</span>
 <span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>#SBATCH --constraint=epyc3</span>
 <span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>#SBATCH --batch=epyc3</span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>#SBATCH --account=a_richardson</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>#SBATCH --account=a_richardson</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>#SBATCH -o slurm-%j.output</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>#SBATCH -e slurm-%j.error</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><em>Note: Fun fact. To comment out a line in the SBATCH, just put a space in between the hash (#) and the S. For example <code># SBATCH --account=a_richardson</code>.</em></p>
 <p>The second section is where I define all the directories. As mentioned above, defining your directories is one of the most important parts of working in the HPC.</p>
 <p>Here, my input directory is a subdirectory within my RDM.</p>
@@ -503,11 +511,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb32"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a># make sure that you are in the top level directory where the .job script is</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>sbatch batch_script.job</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>And again, to check if your batch jobs are running, run <code>squeue --me</code> in your HPC terminal.</p>
+<p>Let’s try to run the script we ran in the interactive session in a batch job.</p>
+<p>First, create an R script with the name <code>01_load_esm.R</code>. This should also be in the .zip file I’ve shared around.</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># DESCRIPTION: Load ESMs</span></span>
+<span></span>
+<span><span class="co"># install.packages(c("terra"))</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/">terra</a></span><span class="op">)</span></span>
+<span><span class="va">temp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html">rast</a></span><span class="op">(</span><span class="st">"tos_Omon_CanESM5_ssp370_r1i1p1f1_gn_201501-210012.nc"</span><span class="op">)</span></span>
+<span><span class="va">temp</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then, let’s create a Slurm script with the name <code>01_load_esm.job</code>. Again, this should also be in the .zip file I’ve shared around. Note that this Slurm script is in <em>epyc4</em>, but I will demo it in <em>epyc3</em>.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>#!/bin/bash --login</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>#SBATCH --job-name=loading_data</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>#SBATCH --nodes=1</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>#SBATCH --ntasks=1</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>#SBATCH --cpus-per-task=1</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>#SBATCH --mem=16G</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>#SBATCH --time=00:01:00</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>#SBATCH --qos=normal</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>#SBATCH --partition=general</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>#SBATCH --constraint=epyc4</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>#SBATCH --batch=epyc4</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>#SBATCH --account=a_richardson</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>#SBATCH -o slurm-%j.output</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>#SBATCH -e slurm-%j.error</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a># Load R</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>module purge</span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>module load r/4.4.2</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a># Run R script</span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>srun Rscript 01_load_esm.R</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now, let’s transfer these files into the same folder as our ESM (in the <code>/scratch/</code> directory) using <code>sftp</code>. Try it out for yourselves <span class="emoji" data-emoji="blush">😊</span>. Code to do this is at the top of this tutorial.</p>
+<p>Then, let’s now submit a batch job. Make sure that you’re in the <code>/scratch/</code> directory you’ve created. Then, run this code in your terminal:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>sbatch 01_load_esm.job</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You should be able to run it properly. Try looking at the <code>.error</code> and <code>.output</code> files. What do you see?</p>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>You can easily [quickly] edit scripts by using <code>nano SCRIPTNAME</code>.</p>
+</div>
+</div>
+</div>
 </section></section><section id="workflow" class="level1"><h1>Workflow</h1>
 <p>That’s pretty much it in terms of the basics of the HPC. In order to practically use these I’ll talk about how I do this in my workflow. Your workflow would look a bit different to mine, so bear that in mind <span class="emoji" data-emoji="blush">😊</span></p>
 <p><strong>1. Write R scripts that are HPC ready.</strong></p>
 <p>This is an example script that I’ve written for my workflow.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Written by: Tin Buenafe (k.buenafe@uq.edu.au)</span></span>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Written by: Tin Buenafe (k.buenafe@uq.edu.au)</span></span>
 <span><span class="co"># 24/04/2025</span></span>
 <span></span>
 <span><span class="co"># Load packages</span></span>
@@ -530,45 +582,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>2. Write Slurm scripts</strong></p>
 <p>The important bits here is that <code><a href="https://rdrr.io/pkg/hotrstuff/man/htr_merge_files.html">htr_merge_files()</a></code> relies on arguments from the <code>srun RScript</code> function in the Slurm script.</p>
 <p>This is the Slurm script that I’ve used for this bit in my workflow.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>#!/bin/bash --login</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>#SBATCH --job-name=merge_thetao</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>#SBATCH --nodes=1</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>#SBATCH --ntasks=1</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>#SBATCH --cpus-per-task=5</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>#SBATCH --mem=16G</span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>#SBATCH --time=36:00:00</span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>#SBATCH --qos=normal</span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>#SBATCH --partition=general</span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>#SBATCH --constraint=epyc3</span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>#SBATCH --batch=epyc3</span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>#SBATCH --account=a_richardson</span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>#SBATCH -o slurm-%j.output</span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>#SBATCH -e slurm-%j.error</span>
-<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a># Define directories</span>
-<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>INPUT_DIR="/QRISdata/Q7957/Repositories/01_depth_resolved_esms/00_raw_esm"</span>
-<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>OUTPUT_DIR="/QRISdata/Q7957/Repositories/01_depth_resolved_esms/01_merged"</span>
-<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a># Recalling files and making sure they are loaded fine in the RDM</span>
-<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>/usr/local/bin/recall_medici $INPUT_DIR</span>
-<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a># Make sure all loaded modules (if any) are purged</span>
-<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>module purge</span>
-<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a># Load cdo</span>
-<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>module use /home/$USER/EasyBuilt/modules/all</span>
-<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a>module load cdo/2.2.2</span>
-<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a># Load R</span>
-<span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a>module load r/4.4.0-combo-EPYC3-only</span>
-<span id="cb34-32"><a href="#cb34-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-33"><a href="#cb34-33" aria-hidden="true" tabindex="-1"></a># Run R script</span>
-<span id="cb34-34"><a href="#cb34-34" aria-hidden="true" tabindex="-1"></a>srun Rscript 01_merge_thetao.r $INPUT_DIR</span>
-<span id="cb34-35"><a href="#cb34-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-36"><a href="#cb34-36" aria-hidden="true" tabindex="-1"></a>echo -e "\nCopying to RDM"</span>
-<span id="cb34-37"><a href="#cb34-37" aria-hidden="true" tabindex="-1"></a># Copy to RDM</span>
-<span id="cb34-38"><a href="#cb34-38" aria-hidden="true" tabindex="-1"></a>cp $TMPDIR/merged/* $OUTPUT_DIR</span>
-<span id="cb34-39"><a href="#cb34-39" aria-hidden="true" tabindex="-1"></a>echo -e "\nCopied to RDM"</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>#!/bin/bash --login</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>#SBATCH --job-name=merge_thetao</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>#SBATCH --nodes=1</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>#SBATCH --ntasks=1</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>#SBATCH --cpus-per-task=5</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>#SBATCH --mem=16G</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>#SBATCH --time=36:00:00</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>#SBATCH --qos=normal</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>#SBATCH --partition=general</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>#SBATCH --constraint=epyc3</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>#SBATCH --batch=epyc3</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>#SBATCH --account=a_richardson</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>#SBATCH -o slurm-%j.output</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>#SBATCH -e slurm-%j.error</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a># Define directories</span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>INPUT_DIR="/QRISdata/Q7957/Repositories/01_depth_resolved_esms/00_raw_esm"</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>OUTPUT_DIR="/QRISdata/Q7957/Repositories/01_depth_resolved_esms/01_merged"</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a># Recalling files and making sure they are loaded fine in the RDM</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>/usr/local/bin/recall_medici $INPUT_DIR</span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a># Make sure all loaded modules (if any) are purged</span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>module purge</span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a># Load cdo</span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>module use /home/$USER/EasyBuilt/modules/all</span>
+<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a>module load cdo/2.2.2</span>
+<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a># Load R</span>
+<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a>module load r/4.4.0-combo-EPYC3-only</span>
+<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a># Run R script</span>
+<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a>srun Rscript 01_merge_thetao.r $INPUT_DIR</span>
+<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-36"><a href="#cb37-36" aria-hidden="true" tabindex="-1"></a>echo -e "\nCopying to RDM"</span>
+<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a># Copy to RDM</span>
+<span id="cb37-38"><a href="#cb37-38" aria-hidden="true" tabindex="-1"></a>cp $TMPDIR/merged/* $OUTPUT_DIR</span>
+<span id="cb37-39"><a href="#cb37-39" aria-hidden="true" tabindex="-1"></a>echo -e "\nCopied to RDM"</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>All the outputs of <code><a href="https://rdrr.io/pkg/hotrstuff/man/htr_merge_files.html">htr_merge_files()</a></code> are saved in the temporary directory. You can see at the last part of my code in the Slurm script, I copy them to my RDM.</p>
 <div class="callout callout-style-simple callout-note">
 <div class="callout-body d-flex">
