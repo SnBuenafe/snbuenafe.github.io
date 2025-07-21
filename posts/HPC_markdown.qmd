@@ -545,7 +545,7 @@ Then, let's now submit a batch job. Make sure that you're in the `/scratch/` dir
 sbatch 01_load_esm.job
 ```
 
-You should be able to run it properly. Try looking at the `.error` and `.output` files. What do you see?
+You should be able to run it properly. Try looking at the `.error` and `.output` files. What do you see? It looks very similar to what you'll find in your console.
 
 ::: callout-note
 You can easily [quickly] edit scripts by using `nano SCRIPTNAME`.
