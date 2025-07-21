@@ -28,8 +28,6 @@ This is a compilation of notes that I've gathered as I work on the High Performa
 
 In order to follow along, you'll need to have an existing HPC account. This process may take some time, so if you are looking to work on the HPC sometime soon, better start on the paperwork! UQ has a lot of useful [documentation](https://rcc.uq.edu.au/systems/high-performance-computing) to get you started on opening your HPC account.
 
-And for ease, I've prepared a [.zip file](https://github.com/SnBuenafe/HPC_notes/releases/download/v1.0.0/UQ_HPC_tutorial.zip) with all of the materials we'll be using today.
-
 ## Why should you work on the HPC?
 
 If you're currently running code that makes your RStudio crash, your monitor show that famous blue screen (if you're on Windows) or if you can hear your machine struggle as it works through dozens of global climate models..... then you should probably consider using the HPC :grimacing:. If you already have code that works on your machine, then moving your workflow to the HPC should be doable. I'm not saying it's easy, but it's a very fruitful journey — one that I definitely don't regret going through.
@@ -57,6 +55,12 @@ ssh USERNAME@bunya.rcc.uq.edu.au
 Change USERNAME to your actual username. For UQ staff, it should be your UQ staff ID, for UQ students (and most HDRs?), it should be your student number. And this is the annoying bit, but you'd need to have your Duo ready for two-factor authentication every time you access the HPC.
 
 To exit the HPC, simply type `exit` on your terminal and hit enter.
+
+::: .callout-note
+You can also "cancel" a specific allocation within the HPC.
+
+First, learn the `JOBID` of your allocation by inputting `squeue --me`. Then, run `scancel JOBID` in your terminal.
+:::
 
 # Directories in the HPC
 
@@ -304,6 +308,7 @@ When you run this code, you'll notice that you're currently working on a separat
 To check your jobs that are running, run `squeue --me`.
 
 ::: callout-note
+
 What is **epyc3**?
 
 The HPC has lots of different things available for their users, but using the HPC is not *really* the same as having your own RStudio. Sometimes, you might want to install your own package or use a different version of packages available in the HPC. We'll talk about the different modules available further down this tutorial.
@@ -321,6 +326,7 @@ salloc --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --mem=5G --job-name=Inter
 ```
 
 So really, you'd only need to add `constraint`. 
+
 :::
 
 Now that we have gotten an interactive session on, let's try to run R.
@@ -357,12 +363,6 @@ R --vanilla
 Now, we can try to run some basic R stuff.
 
 ``` r
-1+1
-```
-
-Packages should be loaded up as well. If not, you should be able to just install packages using `install.packages("package_name")`.
-
-``` r
 library(tidyverse)
 dat <- tribble(~colA, ~colB,
               "a",   1,
@@ -370,6 +370,15 @@ dat <- tribble(~colA, ~colB,
               "c",   3
               )
 dat
+```
+
+Packages should be loaded up as well. If not, you should be able to just install packages using `install.packages("package_name")`. The line of code below needs `terra`.
+
+``` r
+# install.packages(c("terra"))
+library(terra)
+temp <- rast("tos_Omon_CanESM5_ssp370_r1i1p1f1_gn_201501-210012.nc")
+temp
 q() # quit R session
 ```
 
@@ -388,7 +397,7 @@ The main reason why I wanted to work in the HPC is that I already have a working
 Batch jobs are defined using Slurm scripts, which looks like this. This is how my regular Slurm scripts look like.
 
 ``` default
-#!bin/bash --login
+#!/bin/bash --login
 #SBATCH --job-name=climate_wrangling_1
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
@@ -421,7 +430,7 @@ The first section refers to the different parameters of the batch job. Some of t
 
 ``` default
 # section 1
-#!bin/bash --login
+#!/bin/bash --login
 #SBATCH --job-name=climate_wrangling_1
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
@@ -433,6 +442,8 @@ The first section refers to the different parameters of the batch job. Some of t
 #SBATCH --constraint=epyc3
 #SBATCH --batch=epyc3
 #SBATCH --account=a_richardson
+#SBATCH -o slurm-%j.output
+#SBATCH -e slurm-%j.error
 ```
 
 *Note: Fun fact. To comment out a line in the SBATCH, just put a space in between the hash (#) and the S. For example `# SBATCH --account=a_richardson`.*
@@ -486,6 +497,59 @@ sbatch batch_script.job
 ```
 
 And again, to check if your batch jobs are running, run `squeue --me` in your HPC terminal.
+
+Let's try to run the script we ran in the interactive session in a batch job.
+
+First, create an R script with the name `01_load_esm.R`. This should also be in the .zip file I've shared around.
+
+``` r
+# DESCRIPTION: Load ESMs
+
+# install.packages(c("terra"))
+library(terra)
+temp <- rast("tos_Omon_CanESM5_ssp370_r1i1p1f1_gn_201501-210012.nc")
+temp
+```
+
+Then, let's create a Slurm script with the name `01_load_esm.job`. Again, this should also be in the .zip file I've shared around. Note that this Slurm script is in *epyc4*, but I will demo it in *epyc3*.
+
+``` default
+#!/bin/bash --login
+#SBATCH --job-name=loading_data
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=16G
+#SBATCH --time=00:01:00
+#SBATCH --qos=normal
+#SBATCH --partition=general
+#SBATCH --constraint=epyc4
+#SBATCH --batch=epyc4
+#SBATCH --account=a_richardson
+#SBATCH -o slurm-%j.output
+#SBATCH -e slurm-%j.error
+
+# Load R
+module purge
+module load r/4.4.2
+
+# Run R script
+srun Rscript 01_load_esm.R
+```
+
+Now, let's transfer these files into the same folder as our ESM (in the `/scratch/` directory) using `sftp`. Try it out for yourselves :blush:. Code to do this is at the top of this tutorial.
+
+Then, let's now submit a batch job. Make sure that you're in the `/scratch/` directory you've created. Then, run this code in your terminal:
+
+``` default
+sbatch 01_load_esm.job
+```
+
+You should be able to run it properly. Try looking at the `.error` and `.output` files. What do you see?
+
+::: callout-note
+You can easily [quickly] edit scripts by using `nano SCRIPTNAME`.
+:::
 
 # Workflow
 
